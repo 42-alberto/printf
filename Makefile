@@ -2,34 +2,58 @@ NAME	= libftprintf.a
 CC		= cc
 CFLAGS	= -Wall -Wextra -Werror
 LIBC	= ar rcs
-RM		= rm -f
+RM		= rm -rf
 
-# Lista de archivos creados
-SRC	= ft_printf.c \
-ft_printf_utils.c\
+# --- DIRECTORIES ---
+LIBFT_DIR	= libft/
+INC_DIR		= includes/
+SRC_DIR		= srcs/
+UTIL_DIR	= utils/
+OBJ_DIR		= obj/
 
+# --- FILES ---
+SRC_FILES	= ft_printf.c ft_parser.c
+UTIL_FILES	= ft_atoi_printf.c ft_flags_activator.c ft_char_in_flags.c
 
-OBJ	= $(SRC:.c=.o)
+# Generamos los objetos manteniendo la ruta para que las reglas coincidan
+OBJS	= $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
+(addprefix $(OBJ_DIR), $(UTIL_FILES:.c=.o))
 
-# Cabecera de proyecto para tener código reutilizable
-HEADER  = ft_printf.h
+LIBFT	= $(LIBFT_DIR)libft.a
+IFLAGS	= -I $(INC_DIR) -I $(LIBFT_DIR)
+
+# --- RULES ---
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-	$(LIBC) $(NAME) $(OBJ)
+$(LIBFT):
+	@make bonus -C $(LIBFT_DIR)
 
-# Compilación de archivos .c en .o
-%.o: %.c $(HEADER)
-	$(CC) $(CFLAGS) -c $< -o $@
+$(NAME): $(LIBFT) $(OBJS)
+	@cp $(LIBFT) $(NAME)
+	@$(LIBC) $(NAME) $(OBJS)
+	@echo "✓ $(NAME) created successfully"
+
+# Regla para fuentes en srcs/
+$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+
+# Regla para fuentes en utils/
+$(OBJ_DIR)%.o: $(UTIL_DIR)%.c
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(OBJ)
+	@$(RM) $(OBJ_DIR)
+	@make clean -C $(LIBFT_DIR)
+	@echo "✗ Objects removed"
 
 fclean: clean
-	$(RM) $(NAME)
+	@$(RM) $(NAME)
+	@make fclean -C $(LIBFT_DIR)
+	@echo "✗ $(NAME) and libft.a removed"
 
 re: fclean all
 
-# Marcamos las reglas como "falsas" para evitar conflictos con archivos reales
 .PHONY: all clean fclean re
