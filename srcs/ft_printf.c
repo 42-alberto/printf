@@ -38,7 +38,7 @@ const char	*ft_flags_activator(const char *format, t_flags *flags)
 			flags->is_plus = 1;
 		else if (*format == ' ')
 			flags->is_space = 1;
-		format++;The cat says: perfection
+		format++;
 	}
 	return (format);
 }
