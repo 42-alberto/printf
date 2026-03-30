@@ -10,36 +10,22 @@
 /*                                                                      patito*/
 /* ************************************************************************** */
 
-#include "printf.h"
-
-int	ft_print_blanks(int len, int s_len)
-{
-	int	i;
-
-	i = 0;
-	if (s_len >= len)
-		return (0);
-	while (i < len - s_len)
-	{
-		if (write (1, " ", 1) == -1)
-			return (-1);
-		i++;
-	}
-	return (len - s_len);
-}
+#include "ft_printf.h"
 
 int	ft_print_char(int c, t_flags *flags)
 {
 	unsigned char	c_char;
-	int				res;
+	int				blanks_len;
 
-	c_char = (unsigned char) c;
-	if (flags->minus && write(1, &c_char, 1) == -1)
+	c_char = (unsigned char)c;
+	if (flags->is_minus)
+		if (write(1, &c_char, 1) == -1)
+			return (-1);
+	blanks_len = ft_put_n_char(' ', flags->width - 1);
+	if (blanks_len == -1)
 		return (-1);
-	res = ft_print_blanks(flags->len, 1);
-	if (res == -1)
-		return (-1);
-	if (!flags->minus && write(1, &c_char, 1) == -1)
-		return (-1);
-	return (res + 1);
+	if (!flags->is_minus)
+		if (write(1, &c_char, 1) == -1)
+			return (-1);
+	return (blanks_len + 1);
 }

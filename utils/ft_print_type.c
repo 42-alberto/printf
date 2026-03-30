@@ -10,32 +10,26 @@
 /*                                                                      patito*/
 /* ************************************************************************** */
 
-#ifndef PRINTF_H
-# define PRINTF_H
+#include "ft_printf.h"
 
-# include <stdarg.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include "libft.h"
-
-typedef struct flags
+int	ft_print_type(va_list args, t_flags *flags)
 {
-	int	is_minus;
-	int	is_zero;
-	int	is_hashtag;
-	int	is_space;
-	int	is_plus;
-	int	len;
-	int	precision;
-}	t_flags;
-
-int	ft_printf(const char *format, ...);
-int	ft_print_char(int c, t_flags *flags);
-int	ft_print_str(char *str);
-int	ft_print_ptr(unsigned long long ptr);
-int	ft_print_int(int n);
-int	ft_print_unsigned(unsigned int n);
-int	ft_print_hex(unsigned int n, char format);
-int	ft_print_percent(void);
-
-#endif
+	if (flags->type == 'c')
+		return (ft_print_char(va_arg(args, int), flags));
+	else if (flags->type == 's')
+		return (ft_print_str(va_arg(args, char *), flags));
+	else if (flags->type == 'd' || flags->type == 'i')
+		return (ft_print_int((long)va_arg(args, int), flags));
+	else if (flags->type == 'u')
+		return (ft_print_int((long)va_arg(args, unsigned int), flags));
+	else if (flags->type == 'x' || flags->type == 'X')
+		return (ft_print_hex((unsigned long)va_arg(args, unsigned int), flags));
+	else if (flags->type == 'p')
+	{
+		flags->precision = -1;
+		return (ft_print_hex((unsigned long)va_arg(args, void *), flags));
+	}
+	else if (flags->type == '%')
+		return (ft_print_char('%', flags));
+	return (write(1, &flags->type, 1));
+}

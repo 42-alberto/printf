@@ -1,28 +1,39 @@
 NAME	= libftprintf.a
 CC		= cc
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra
 LIBC	= ar rcs
 RM		= rm -rf
 
-# --- DIRECTORIES ---
+# DIRECTORIES
 LIBFT_DIR	= libft/
 INC_DIR		= includes/
 SRC_DIR		= srcs/
 UTIL_DIR	= utils/
 OBJ_DIR		= obj/
 
-# --- FILES ---
-SRC_FILES	= ft_printf.c ft_parser.c
-UTIL_FILES	= ft_atoi_printf.c ft_flags_activator.c ft_char_in_flags.c
+# FILES
+SRC_FILES   = ft_printf.c
 
-# Generamos los objetos manteniendo la ruta para que las reglas coincidan
-OBJS	= $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o)) \
-(addprefix $(OBJ_DIR), $(UTIL_FILES:.c=.o))
+PRINT_FILES  = ft_put_utils.c\
+	ft_count_utils.c\
+	ft_print_char.c\
+	ft_print_hex.c\
+	ft_print_int.c\
+	ft_print_str.c\
+	ft_print_type.c
 
+
+OBJS	= $(addprefix $(OBJ_DIR), $(SRC_FILES:.c=.o))\
+	$(addprefix $(OBJ_DIR), $(PRINT_FILES:.c=.o))
+
+# INCLUDES
 LIBFT	= $(LIBFT_DIR)libft.a
 IFLAGS	= -I $(INC_DIR) -I $(LIBFT_DIR)
 
-# --- RULES ---
+# VPATH
+VPATH	= $(SRC_DIR) $(UTIL_DIR)
+
+# RULES
 
 all: $(NAME)
 
@@ -34,15 +45,10 @@ $(NAME): $(LIBFT) $(OBJS)
 	@$(LIBC) $(NAME) $(OBJS)
 	@echo "✓ $(NAME) created successfully"
 
-# Regla para fuentes en srcs/
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c
+$(OBJ_DIR)%.o: %.c
 	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
-
-# Regla para fuentes en utils/
-$(OBJ_DIR)%.o: $(UTIL_DIR)%.c
-	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@$(CC) $(CFLAGS) $(IFLAGS) -c $< -o $@
+	@echo "  Compiling: $<"
 
 clean:
 	@$(RM) $(OBJ_DIR)
@@ -52,7 +58,7 @@ clean:
 fclean: clean
 	@$(RM) $(NAME)
 	@make fclean -C $(LIBFT_DIR)
-	@echo "✗ $(NAME) and libft.a removed"
+	@echo "✗ $(NAME) and libraries removed"
 
 re: fclean all
 
