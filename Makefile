@@ -63,3 +63,19 @@ fclean: clean
 re: fclean all
 
 .PHONY: all clean fclean re
+
+# Extra para correr tests
+# Colores
+GREEN = \033[0;32m
+RESET = \033[0m
+
+# Regla de Test
+test: all
+	@cc tests/main_test.c -I includes -I libft -L. -lftprintf \
+		-Wl,--wrap=write -Wno-format -o test_printf
+	@echo "$(GREEN)✓ Test compilado con éxito (con wrapper de write)$(RESET)"
+	@./test_printf
+	@make fclean
+	@rm -f test_printf
+	@rm -f libftprintf.a
+	
