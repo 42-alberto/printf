@@ -55,12 +55,14 @@ fclean: clean
 
 re: fclean all
 
+bonus: all
+
 # Test rule
 test: all
-	@$(CC) tests/main_test.c $(IFLAGS) -L. -lftprintf -o test_printf
-	@./test_printf
+	@$(CC) $(CFLAGS) -Wno-format tests/main_test.c -I $(INC_DIR) -I $(LIBFT_DIR) \
+		-L. -lftprintf -Wl,--wrap=write -o test_printf
+	@echo "\033[0;32m✓ Test compiled (Warnings silenced y Wrapper active)\033[0m"
+	@valgrind --leak-check=full ./test_printf
 	@$(RM) test_printf
-
-bonus: all
 
 .PHONY: all clean fclean re test bonus
