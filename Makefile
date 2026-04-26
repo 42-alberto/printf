@@ -1,6 +1,6 @@
 NAME        = libftprintf.a
 CC          = cc
-CFLAGS      = -Wall -Wextra -Werror
+CFLAGS      = -Wno-format -Wall -Wextra -Werror
 LIBC        = ar rcs
 RM          = rm -f
 
@@ -64,5 +64,6 @@ test: all
 	@echo "\033[0;32m✓ Test compiled (Warnings silenced y Wrapper active)\033[0m"
 	@valgrind --leak-check=full ./test_printf
 	@$(RM) test_printf
+	@$(MAKE) fclean
 
 .PHONY: all clean fclean re test bonus

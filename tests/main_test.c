@@ -26,6 +26,19 @@ int	main(void)
 	int ft, std;
 	char *s_null = NULL;
 
+
+
+	ft_printf("--- Errores exadecimales ---\n");
+	std = printf("STD: x0[%x] X0[%X] #x[%#x] #X[%#X] #.0x[%#.0x] #.0X[%#.0X]\n", 0, 0, 0, 0, 0, 0);
+	ft = ft_printf("FT : x0[%x] X0[%X] #x[%#x] #X[%#X] #.0x[%#.0x] #.0X[%#.0X]\n", 0, 0, 0, 0, 0, 0);
+	printf("R: FT %d | STD %d\n", ft, std);
+	if (ft == std)
+		printf("RESULTADO: ✅\n\n");
+	else
+		printf("RESULTADO: ❌ difieren %d caracteres.\n\n", ft - std);
+
+
+
 	printf("--- TESTS GENERAL DE FORMATOS ---\n");
     ft = ft_printf("FT : [%010c] [%.3s] [%+d] [%#x]\n", 'A', "42cursus", 42, 255);
     std = printf("STD: [%010c] [%.3s] [%+d] [%#x]\n", 'A', "42cursus", 42, 255);

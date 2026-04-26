@@ -30,6 +30,9 @@ int	ft_print_type(va_list args, t_flags *flags)
 		return (ft_print_hex((unsigned long)va_arg(args, void *), flags));
 	}
 	else if (flags->type == '%')
+	{
+		flags->width = 0;
 		return (ft_print_char('%', flags));
+	}
 	return (write(1, &flags->type, 1));
 }

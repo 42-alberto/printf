@@ -48,6 +48,8 @@ int	ft_print_hex(unsigned long n, t_flags *f)
 
 	if (f->type == 'p' && n == 0)
 		return (ft_print_str("(nil)", f));
+	if (n == 0)
+		f->is_hashtag = 0;
 	d_len = ft_count_digits(n, f);
 	z_len = ft_count_zeros(d_len, n, f);
 	return (ft_assemble_hex(d_len, n, z_len, f));
